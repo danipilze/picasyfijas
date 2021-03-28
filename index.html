@@ -16,7 +16,7 @@
     <div class="title">Picas y Fijas</div>
     <div class="game-container">
       <div class="message_question">
-        <span>Ingresa cuatro número diferentes y oprime Enter</span>
+        Ingresa <span id="err">cuatro dígitos diferentes</span> y oprime Enter
         <div class="question"><input type="text" id="number" /></div>
       </div>
       <div class="result">
@@ -33,7 +33,28 @@
       </div>
     </div>
 
+    <div class="won">
+      <span>¡Ganaste!</span>
+      <div class="replay">
+        <a href="#">Jugar Nuevamente</a>
+      </div>
+    </div>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+    <script id="result_template" type="text/x-handlebars-template">
+      <tr>
+        <td>
+          {{numero}}
+        </td>
+        <td>
+          {{picas}}
+        </td>
+        <td>
+          {{fijas}}
+        </td>
+      </tr>
+    </script>
     <script src="./js/index.js"></script>
   </body>
 </html>

@@ -1,46 +1,107 @@
-var correct;
-var score = 0;
+var data;
+var digit = [];
+var random_number = '';
+var won = 0;
+var valida;
 
-game();
+random();
 
-$('.option').on('click', guess);
-$('.close a').on('click', function () {
-  $('.result').hide();
-  $('.option').removeClass('scale');
+$('#number').keypress(enter);
+$('.replay a').on('click', replay);
 
-  game();
-});
-
-function game() {
-  correct = Math.floor(Math.random() * 2);
-
-  $('.option').each(function (index) {
-    var color = generateColor();
-    $(this).css('background-color', color);
-
-    if (index == correct) {
-      $('.question').text(color);
+function enter(e) {
+  var code = e.keyCode ? e.keyCode : e.which;
+  if (code == 13) {
+    var numero = $('#number').val();
+    valida = validateplayerNumber(numero);
+    if (valida == 1) {
+      $('#err').removeClass('error');
+      picasFijas(numero, random_number);
+      obtenerDatos(numero);
+      addResult();
+    } else {
+      $('#err').addClass('error');
     }
-  });
-}
-
-function guess() {
-  $(this).addClass('scale');
-  var index = $('.option').index(this);
-  if (index == correct) {
-    $('.result.won').show();
-    score++;
-  } else {
-    $('.result.lost').show();
-    score = 0;
   }
-  $('.score span').text(score);
-}
-
-function generateColor() {
-  return 'rgb(' + random() + ',' + random() + ',' + random() + ')';
 }
 
 function random() {
-  return Math.floor(Math.random() * 255);
+  // Hecho por KarlanKas en el 2004
+  //No me quites el crédito
+  for (i = 0; i < 4; i++) {
+    digit[i] = parseInt(Math.random() * 10);
+    for (j = 0; j < i; j++) {
+      if (digit[i] == digit[j]) {
+        i -= 1;
+        break;
+      }
+    }
+  }
+  for (i = 0; i < 4; i++) {
+    random_number += digit[i];
+  }
+  return random_number;
+}
+
+function validateplayerNumber(playerNumber) {
+  for (var i = 0; i < 4; i++) {
+    for (var j = 0; j < i; j++) {
+      if (playerNumber[i] == playerNumber[j] || playerNumber.length != 4) {
+        i = 4;
+        j = 4;
+        validate = 0;
+        break;
+      } else {
+        validate = 1;
+      }
+    }
+  }
+  return validate;
+}
+
+function picasFijas(playerNumber, randomNumber) {
+  fijas = 0;
+  picas = 0;
+  for (var i = 0; i < playerNumber.length; i++) {
+    for (var j = 0; j < playerNumber.length; j++) {
+      if (playerNumber[i] === randomNumber[j] && i == j) {
+        fijas++;
+      } else if (playerNumber[i] === randomNumber[j]) {
+        picas++;
+      }
+    }
+  }
+  if (fijas == 4) {
+    won = 1;
+    wonPlay();
+  }
+}
+
+function obtenerDatos(number) {
+  data = {
+    numero: number,
+    picas: picas,
+    fijas: fijas,
+  };
+
+  $('#number').val('');
+}
+
+function addResult() {
+  var source = $('#result_template').html();
+  var template = Handlebars.compile(source);
+  var html = template(data);
+
+  $('tbody').append(html);
+}
+
+function wonPlay() {
+  $('.won').show();
+}
+
+function replay() {
+  $('.won').hide();
+  random_number = '';
+  random();
+  $('tbody tr').remove();
 }
