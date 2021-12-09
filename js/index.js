@@ -1,10 +1,8 @@
 var data;
 var digit = [];
-var random_number = '';
 var won = 0;
 var valida;
 
-random();
 
 $('#number').keypress(enter);
 $('.replay a').on('click', replay);
@@ -25,23 +23,6 @@ function enter(e) {
   }
 }
 
-function random() {
-  // Hecho por KarlanKas en el 2004
-  //No me quites el crédito
-  for (i = 0; i < 4; i++) {
-    digit[i] = parseInt(Math.random() * 10);
-    for (j = 0; j < i; j++) {
-      if (digit[i] == digit[j]) {
-        i -= 1;
-        break;
-      }
-    }
-  }
-  for (i = 0; i < 4; i++) {
-    random_number += digit[i];
-  }
-  return random_number;
-}
 
 function validateplayerNumber(playerNumber) {
   for (var i = 0; i < 4; i++) {
